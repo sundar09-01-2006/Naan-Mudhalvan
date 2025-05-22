@@ -1,0 +1,51 @@
+import datetime
+
+class ProductBatch:
+    def __init__(self, batch_id, inspected, defects):
+        self.batch_id = batch_id
+        self.inspected = inspected
+        self.defects = defects
+        self.date = datetime.date.today()
+
+    def defect_rate(self):
+        return (self.defects / self.inspected) * 100 if self.inspected else 0
+
+
+class QualityControlSystem:
+    def __init__(self):
+        self.batches = []
+
+    def add_batch(self, batch_id, inspected, defects):
+        batch = ProductBatch(batch_id, inspected, defects)
+        self.batches.append(batch)
+        print(f"Batch {batch_id} added successfully.")
+
+    def generate_report(self):
+        print("\n--- Quality Control Report ---")
+        for batch in self.batches:
+            print(f"Batch ID: {batch.batch_id}")
+            print(f"Date: {batch.date}")
+            print(f"Inspected Units: {batch.inspected}")
+            print(f"Defects Found: {batch.defects}")
+            print(f"Defect Rate: {batch.defect_rate():.2f}%")
+            print("-----------------------------")
+
+    def get_average_defect_rate(self):
+        if not self.batches:
+            return 0
+        total_defect_rate = sum(batch.defect_rate() for batch in self.batches)
+        return total_defect_rate / len(self.batches)
+
+
+# Example usage
+if __name__ == "__main__":
+    qc = QualityControlSystem()
+    
+    qc.add_batch("B001", inspected=1000, defects=15)
+    qc.add_batch("B002", inspected=1200, defects=20)
+    qc.add_batch("B003", inspected=800, defects=5)
+
+    qc.generate_report()
+    
+    avg_defect_rate = qc.get_average_defect_rate()
+    print(f"\nAverage Defect Rate Across All Batches: {avg_defect_rate:.2f}%")
